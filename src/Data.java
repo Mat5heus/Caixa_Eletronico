@@ -14,19 +14,19 @@ public class Data {
 	
 	public Data(int dia, int mes, int ano) {
 		this.setAno(ano);	
-		if (mes > 0  && mes <= 12) {
+		if (mes > 0  && mes <= 12) { //verifica se é um mes valido
 			this.setMes(mes);
 			this.defineMesCompleto(mes);
 		} else
-			this.dataInvalida();
-		if(this.isDiaValid(dia, this.diaMax(ano,mes)))
+			this.dataInvalida(); // informa o usuario caso nao seja
+		if(this.isDiaValid(dia, this.diaMax(ano,mes))) // verifica se o dia é valido
 			this.setDia(dia);
 		else
-			this.dataInvalida();
-		this.defineEstacao(dia,mes);
+			this.dataInvalida(); // informa o usuario caso nao seja
+		this.defineEstacao(dia,mes); // seta a estacão para a data
 	}
 
-	
+	//defina e salva o mes atual
 	public void defineMesCompleto(int mes) {
 		switch(mes) {
 		case 1:
@@ -67,24 +67,27 @@ public class Data {
 		}
 	}
 	
+	// Avanca um dia no calendario
 	public void avançarUmDia() {
 		this.avançarDias(1);
 	}
 	
+	// Gera uma "pontuação" para cada dia do mes e insere 
 	public void defineEstacao(int dia,int mes) {
 		int total = dia + (mes * 100);
 		if (total < 320 || total >= 1222)
 			this.setEstacao("Inverno");
-		else if (total >= 320 && total < 621)
+		else if (total < 621)
 			this.setEstacao("Primavera");
-		else if (total >= 621 && total < 923)
+		else if (total < 923)
 			this.setEstacao("Verão");
-		else if (total >= 923 && mes < 1222)
+		else if (mes < 1222)
 			this.setEstacao("Outono");
 		else
 			this.setEstacao("Indefinido");
 	}
 	
+	// Avança uma determinada quantidade de dias
 	public void avançarDias(int dias) {
 		
 		while(! this.isDiaValid( this.getDia()+dias, this.diaMax(this.getAno(),this.getMes()) ) ) {
@@ -101,12 +104,15 @@ public class Data {
 		this.defineEstacao(this.getDia(), this.getMes());
 	}
 	
+	// Verifica se o dia está dentro dos limites do mes
 	public boolean isDiaValid(int dia, int max) {
 		if(dia <= max && dia > 0)
 			return true;
 		else 
 			return false;
 	}
+	
+	// Retorna o maximo de dias de um determinado mes no ano
 	public int diaMax(int ano,int mes) {
 		if ((mes % 2 == 0 && mes <= 6 && mes != 2)||(mes % 2 != 0 && mes >= 9)) 
 			return 30; 
@@ -118,6 +124,7 @@ public class Data {
 			return 28;
 	}
 	
+	// Exibe a data com a identificação antes
 	public void apresentarData(boolean isCompleto) {
 		if (isCompleto) {
 			System.out.println("Data: "+this.getDia()+" de "+this.getMesCompleto()+
@@ -128,6 +135,8 @@ public class Data {
 		}
 		
 	}
+	
+	// Exibe a data sem a identificação
 	public String dataCompleta() {
 		return this.getDia()+" de "+this.getMesCompleto()+" de "+this.getAno();
 	}
@@ -135,15 +144,21 @@ public class Data {
 		return this.eMenor(this.getDia())+"/"+this.eMenor(this.getMes())+"/"+this.getAno();
 	}
 	
+	// Acresenta um 0 caso o valor < 10
 	public String eMenor(int valor) {
 		if (valor < 10)
 			return "0"+valor;
 		return ""+valor;
 	}
 	
+	// Em caso de erro
 	public void dataInvalida() {
 		System.out.println("Data invalida!");
 	}
+	
+	//-----------------------------//
+	//----- Getters & Setters -----//
+	//-----------------------------//
 
 	public int getAno() {
 		return ano;

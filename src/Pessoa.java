@@ -12,19 +12,27 @@ public abstract class Pessoa {
 		this.setNasc(nasc);
 	}
 	
+	// Calcula a idade da pessoa com base na data de nascimento
 	public int idade () {
 		Calendar cal = Calendar.getInstance();
 		
+		// soma dia e mes de forma que o dia sempre esteja nos ultímos 2 digitos
 		int soma = cal.get(Calendar.DATE) + (cal.get(Calendar.MONTH) * 100);
 		int total = this.nasc.getDia() + (this.nasc.getMes() * 100);
+		
+		// Faz a diferença entre os anos para achar a idade
 		int ano = cal.get(Calendar.YEAR) - this.nasc.getAno();
 		
+		// Tira uma ano caso a pessoa não tenha feito aniversario
 		if(soma < total)
 			return ano - 1;
 		
 		return ano;
 	}
 	
+	//-----------------------------//
+	//----- Getters & Setters -----//
+	//-----------------------------//
 	public String getNome() {
 		return nome;
 	}

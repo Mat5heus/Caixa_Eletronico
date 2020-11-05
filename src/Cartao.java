@@ -16,27 +16,33 @@ public class Cartao {
 		Scanner scan = new Scanner(System.in);
 		int senha;
 		
+		// Verifica se o cartão do usuario já esta bloqueado
 		if(this.estaBloqueado) {
 			Conta.mensagens(cliente, 6);
 			Conta.mensagens(cliente, 7);
 			return false;
 		}
-			
+		
+		// Da direito a 3 tentativas antes de bloquear o cartão
 		for(int ctd = 1; ctd <= 3; ctd++) {
 			if(ctd > 1) System.out.print(ctd+" tentativa...\n");
 			System.out.print("Digite a senha do cartão: ");
 			senha = Integer.parseInt(scan.nextLine());
-			if(senha == this.senha)
+			if(senha == this.getSenha())
 				return true;
 			else
 				Conta.mensagens(cliente, 5);
 		}
 		
+		// Avisa o usuario e bloqueia o cartão
 		Conta.mensagens(cliente, 6);
 		this.setEstaBloqueado(true);
 		return false;
 	}
 	
+	//-----------------------------//
+	//----- Getters & Setters -----//
+	//-----------------------------//
 	public int getCodigo() {
 		return codigo;
 	}
@@ -50,7 +56,7 @@ public class Cartao {
 		this.bandeira = bandeira;
 	}
 
-	public int getSenha() {
+	private int getSenha() {
 		return senha;
 	}
 

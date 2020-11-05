@@ -5,8 +5,4 @@ public final class Cliente extends Pessoa {
 		super(nome, cpf, rg, nasc);
 	}
 	
-	
-	
-	
-	
 }
