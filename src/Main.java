@@ -9,10 +9,10 @@ public class Main {
 		int ctd = 0;
 		
 		Cliente jair = new Cliente("Jair", 9834920, 7938432, new Data(12,06,2005));
-		Conta contaJair = new Conta(jair, 98739847, "Mastercard", 1234);
+		Conta contaJair = new Conta(jair, 98739847, "Mastercard", 1234, new Data());
 		
-		Cliente janete = new Cliente("Janete", 8983573, 4847538, new Data(17,05,2025));
-		Conta contaJanete = new Conta(janete, 8734895, "Visa", 9372);
+		Cliente janete = new Cliente("Janete", 8983573, 4847538, new Data(17,05,1997));
+		Conta contaJanete = new Conta(janete, 8734895, "Visa", 9372, new Data(12,04,2013));
 		
 		Conta contas[] = {contaJair, contaJanete};
 		
@@ -44,8 +44,9 @@ public class Main {
 					"3) Deposito\n"+
 					"4) Transferência\n"+
 					"5) Informações gerais\n"+
-					"6) Sair da conta\n"+
-					"7) Finalizar operação\n"
+					"6) "+(!contas[ctd].isAberta()? "Ativar\n" : "Desativar\n")+
+					"7) Sair da conta\n"+
+					"8) Finalizar operação\n"
 					);
 			
 			System.out.print("Digite a opção desejada: ");
@@ -81,13 +82,15 @@ public class Main {
 					contas[ctd].transferencia(aux[i],valor);
 			} else if(resp.equals("5")) {
 				contas[ctd].informacoesGerais();
-			} else if(resp.equals("6")) {
+			}else if(resp.equals("6")) {
+				contas[ctd].setAberta((!contas[ctd].isAberta()? true : false));;
+			} else if(resp.equals("7")) {
 				System.out.println("\n========= Logout concluído =========\n");
 				flag = false;
 				
 			}
 			
-		} while (!resp.equals("7"));
+		} while (!resp.equals("8"));
 		
 		scan.close();
 		

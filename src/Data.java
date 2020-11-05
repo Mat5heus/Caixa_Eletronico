@@ -128,12 +128,11 @@ public class Data {
 		}
 		
 	}
-	public String dataPura() {
+	public String dataCompleta() {
 		return this.getDia()+" de "+this.getMesCompleto()+" de "+this.getAno();
 	}
-	public void apresentarData() {
-		System.out.println("Data: "+this.eMenor(this.getDia())+"/"+
-			this.eMenor(this.getMes())+"/"+this.getAno());
+	public String dataSimples() {
+		return this.eMenor(this.getDia())+"/"+this.eMenor(this.getMes())+"/"+this.getAno();
 	}
 	
 	public String eMenor(int valor) {

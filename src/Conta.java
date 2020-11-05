@@ -1,32 +1,38 @@
 public class Conta implements funcionalidades_conta {
-	private int saldo, cheque_especial;
+	private int saldo, cheque_especial, codigo;
 	private boolean aberta;
 	private Cliente cliente;
 	private Cartao cartao;
-	private int codigo;
+	private Data data;
 	
-	public Conta(Cliente cliente, int codigo, String bandeira, int senha) {
+	public Conta(Cliente cliente, int codigo, String bandeira, int senha, Data data) {
 		this.setCliente(cliente);
 		this.setCodigo(codigo);
 		this.setCartao(new Cartao(codigo, bandeira, senha));
 		this.setSaldo(0);
 		this.setCheque_especial(300);
+		this.setData(data);
 		this.setAberta(false);
 	}
 	
 	public void deposito(int valor) {
-		if(this.getCheque_especial() + valor <= 300) {
-			this.setCheque_especial(this.getCheque_especial() + valor);
-		} else if (this.getCheque_especial() <= 300) {
-			valor -= 300 - this.getCheque_especial();
-			if(valor > 0) {
-				this.setCheque_especial(300);
+		if(this.aberta) {
+			if(this.getCheque_especial() + valor <= 300) {
+				this.setCheque_especial(this.getCheque_especial() + valor);
+			} else if (this.getCheque_especial() <= 300) {
+				valor -= 300 - this.getCheque_especial();
+				if(valor > 0) {
+					this.setCheque_especial(300);
+					this.setSaldo(this.getSaldo() + valor);
+				}
+			} else 
 				this.setSaldo(this.getSaldo() + valor);
-			}
-		} else 
-			this.setSaldo(this.getSaldo() + valor);
-		
-		Conta.mensagens(this.getCliente(), 3);
+			
+			Conta.mensagens(this.getCliente(), 3);
+		} else {
+			Conta.mensagens(this.cliente, 9);
+			Conta.mensagens(this.cliente, 7);
+		}
 	}
 	
 	public static void mensagens(Cliente cliente, int numero, int valor) {
@@ -67,38 +73,57 @@ public class Conta implements funcionalidades_conta {
 		case 8:
 			System.out.println("Saque realizado!");
 			break;
+		case 9:
+			System.out.println("Conta não ativa!");
+			break;
 		default:
 			System.out.println("Código de mensagem invalido!");
 		}
 	}
 	
 	public int sacar(int valor) {
-		int aux = valor;
-		if(this.getSaldo() + this.getCheque_especial() >= valor) {
-			valor = valor - this.getSaldo();
-			if(valor > 0) {
-				this.setSaldo(0);
-				this.setCheque_especial(this.getCheque_especial() - valor);
-			} else 
-				this.setSaldo(this.getSaldo() - aux);
-			Conta.mensagens(this.getCliente(), 8);
-			return aux;
+		if(this.aberta) {
+			int aux = valor;
+			if(this.getSaldo() + this.getCheque_especial() >= valor) {
+				valor = valor - this.getSaldo();
+				if(valor > 0) {
+					this.setSaldo(0);
+					this.setCheque_especial(this.getCheque_especial() - valor);
+				} else 
+					this.setSaldo(this.getSaldo() - aux);
+				Conta.mensagens(this.getCliente(), 8);
+				return aux;
+			} else {
+				Conta.mensagens(this.getCliente(),1);
+				return 0;
+			}
 		} else {
-			Conta.mensagens(this.getCliente(),1);
-			return 0;
+			Conta.mensagens(this.cliente, 9);
+			Conta.mensagens(this.cliente, 7);
 		}
+		return 0;
 		
 	}
 	
 	public void transferencia(Conta conta, int valor) {
-		if (this.sacar(valor) != 0)
-			conta.deposito(valor);
-		else
-			Conta.mensagens(this.getCliente(),2);
+		if(this.aberta) {
+			if (this.sacar(valor) != 0)
+				conta.deposito(valor);
+			else
+				Conta.mensagens(this.getCliente(),2);
+		} else {
+			Conta.mensagens(this.cliente, 9);
+			Conta.mensagens(this.cliente, 7);
+		}
 	}
 	
 	public void consulta() {
-		Conta.mensagens(this.getCliente(), 1, this.getSaldo());
+		if(this.aberta) 
+			Conta.mensagens(this.getCliente(), 1, this.getSaldo());
+		else {
+			Conta.mensagens(this.cliente, 9);
+			Conta.mensagens(this.cliente, 7);
+		}
 	}
 
 	public void informacoesGerais() {
@@ -115,6 +140,8 @@ public class Conta implements funcionalidades_conta {
 				"Cliente: "+this.getCliente().getNome()+"\n"+
 				"Idade do cliente: "+this.getCliente().idade()+"\n"+
 				"Conta:"+this.getCodigo()+"\n"+
+				"Data de criação: "+this.getData().dataSimples()+"\n"+
+				"Status da conta: "+(this.isAberta() ? "Ativa" : "Desativada")+"\n"+
 				"Saldo: "+this.getSaldo()+"\n"+
 				"Cheque Especial: "+this.getCheque_especial()+" "+saldo_devedor
 				);
@@ -169,5 +196,13 @@ public class Conta implements funcionalidades_conta {
 
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
+	}
+
+	public Data getData() {
+		return data;
+	}
+
+	public void setData(Data data) {
+		this.data = data;
 	};
 }

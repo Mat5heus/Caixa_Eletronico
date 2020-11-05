@@ -22,7 +22,8 @@ public class Cartao {
 			return false;
 		}
 			
-		for(int ctd = 0; ctd < 3; ctd++) {
+		for(int ctd = 1; ctd <= 3; ctd++) {
+			if(ctd > 1) System.out.print(ctd+" tentativa...\n");
 			System.out.print("Digite a senha do cartão: ");
 			senha = Integer.parseInt(scan.nextLine());
 			if(senha == this.senha)
@@ -30,8 +31,6 @@ public class Cartao {
 			else
 				Conta.mensagens(cliente, 5);
 		}
-		
-		scan.close();
 		
 		Conta.mensagens(cliente, 6);
 		this.setEstaBloqueado(true);
